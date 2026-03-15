@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Grounded" />
+  <meta name="theme-color" content="#0b1220" />
+  <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9WnQ0lUAAAAASUVORK5CYII=">
+  <title>Grounded iPhone Web App</title>
+  <style>
+    :root{
+      --bg1:#0b1220; --bg2:#111827; --card:#111827ee; --text:#e5e7eb; --muted:#94a3b8;
+      --border:#233043; --accent:#38bdf8; --green:#22c55e; --amber:#f59e0b; --red:#fb7185; --purple:#a78bfa;
+    }
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{margin:0;padding:0;background:linear-gradient(180deg,var(--bg1),var(--bg2));color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.45}
+    body{padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+    .wrap{max-width:1040px;margin:0 auto;padding:14px 14px 90px}
+    h1,h2,h3{margin:0 0 10px} h1{font-size:1.9rem} h2{font-size:1.1rem} h3{font-size:1rem}
+    p{margin:0 0 10px} .sub{color:var(--muted);margin-bottom:14px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px;margin:14px 0;box-shadow:0 10px 28px rgba(0,0,0,.25)}
+    .pill{display:inline-block;padding:6px 10px;border-radius:999px;font-size:.8rem;font-weight:700;margin-bottom:10px;
+      border:1px solid rgba(56,189,248,.25);color:#7dd3fc;background:rgba(56,189,248,.10)}
+    .pill.green{color:#86efac;border-color:rgba(34,197,94,.25);background:rgba(34,197,94,.10)}
+    .pill.purple{color:#c4b5fd;border-color:rgba(167,139,250,.25);background:rgba(167,139,250,.10)}
+    .pill.amber{color:#fcd34d;border-color:rgba(245,158,11,.25);background:rgba(245,158,11,.10)}
+    .grid{display:grid;grid-template-columns:1fr;gap:12px} @media(min-width:820px){.grid.two{grid-template-columns:1fr 1fr}}
+    .quote{background:rgba(56,189,248,.08);border-left:3px solid var(--accent);border-radius:12px;padding:12px 14px;font-size:1.01rem;white-space:pre-wrap}
+    .step{background:#0b1220;border:1px solid var(--border);border-radius:12px;padding:10px 12px;margin:8px 0}
+    .badge{display:inline-block;min-width:24px;text-align:center;margin-right:8px;padding:2px 8px;border-radius:999px;background:#1e293b;color:#93c5fd;font-weight:700;font-size:.85rem}
+    input[type="text"], textarea, select{width:100%;background:#0b1220;color:var(--text);border:1px solid #334155;border-radius:12px;padding:12px;font-size:16px;margin-top:8px}
+    textarea{min-height:100px}
+    .checkrow{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid rgba(148,163,184,.12)}
+    .checkrow:last-child{border-bottom:none}
+    input[type="checkbox"]{width:20px;height:20px;margin-top:2px;accent-color:var(--accent);flex:0 0 auto}
+    .small{font-size:.92rem;color:var(--muted)}
+    .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    button{border:none;border-radius:12px;padding:11px 14px;font-size:.96rem;font-weight:700;cursor:pointer}
+    .primary{background:var(--accent);color:#062033} .secondary{background:#1f2937;color:var(--text);border:1px solid #334155}
+    .warn{background:var(--amber);color:#2b1600}
+    .tabs{display:flex;gap:8px;overflow:auto;padding-bottom:4px;margin-bottom:12px}
+    .tab-btn{background:#1f2937;color:var(--text);border:1px solid #334155;white-space:nowrap}
+    .tab-btn.active{background:var(--accent);color:#062033}
+    .tab-pane{display:none} .tab-pane.active{display:block}
+    .kpi{display:grid;grid-template-columns:repeat(2,1fr);gap:10px} @media(min-width:720px){.kpi{grid-template-columns:repeat(4,1fr)}}
+    .stat{background:#0b1220;border:1px solid var(--border);border-radius:14px;padding:12px}
+    .stat .num{font-size:1.35rem;font-weight:800} .stat .lbl{color:var(--muted);font-size:.85rem}
+    .install-note{font-size:.9rem;color:var(--muted)}
+    .footer{text-align:center;color:var(--muted);font-size:.9rem;margin-top:18px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Grounded</h1>
+    <p class="sub">Single-file iPhone-ready web app. For best results, open from a live Safari link, then use Share → Add to Home Screen.</p>
+
+    <div class="card">
+      <div class="pill amber">Install Note</div>
+      <p class="install-note">This file is fully self-contained in one HTML file. iPhone will only allow <strong>Add to Home Screen</strong> from a page opened in Safari from a web URL, not from the Files app preview.</p>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="showTab('morning', this)">Morning</button>
+      <button class="tab-btn" onclick="showTab('reset', this)">Panic Reset</button>
+      <button class="tab-btn" onclick="showTab('rehearsal', this)">Hard Conversation</button>
+      <button class="tab-btn" onclick="showTab('repair', this)">Repair Scripts</button>
+      <button class="tab-btn" onclick="showTab('home', this)">Home Leadership</button>
+      <button class="tab-btn" onclick="showTab('counseling', this)">Counseling</button>
+      <button class="tab-btn" onclick="showTab('night', this)">Night</button>
+    </div>
+
+    <div id="morning" class="tab-pane active">
+      <div class="card">
+        <div class="pill">60-Second Morning Script</div>
+        <div class="quote" id="morningScript">Today I do not need to prove anything.
+I need to be steady.
+My job is to lower pressure and raise safety.
+I will listen before I explain.
+I will follow through without being reminded.
+I will notice what needs doing and handle it.
+I can want closeness without chasing it.
+I can feel anxiety without obeying it.
+Today I will act like the husband and father I want to be — calm, present, accountable, and grounded.</div>
+        <div class="btns"><button class="primary" onclick="copyText('morningScript')">Copy Script</button></div>
+      </div>
+
+      <div class="grid two">
+        <div class="card">
+          <div class="pill green">2-Minute Grounding</div>
+          <div class="step"><span class="badge">1</span>Feet on the floor. Unclench jaw and shoulders.</div>
+          <div class="step"><span class="badge">2</span>Breathe in 4, hold 4, out 6–8. Repeat 5 times.</div>
+          <div class="step"><span class="badge">3</span>Name 3 facts: “I am here. I am safe. I do not need to solve everything this morning.”</div>
+          <div class="step"><span class="badge">4</span>Choose your posture: calm, warm, not chasing, not withdrawing.</div>
+        </div>
+        <div class="card">
+          <div class="pill purple">Today’s Focus</div>
+          <p class="small">Pick 3–5 only.</p>
+          <div class="checkrow"><input type="checkbox" id="f1"><label for="f1">Handle things without needing reminded.</label></div>
+          <div class="checkrow"><input type="checkbox" id="f2"><label for="f2">Follow through on what you said you’ll do.</label></div>
+          <div class="checkrow"><input type="checkbox" id="f3"><label for="f3">Think one step ahead.</label></div>
+          <div class="checkrow"><input type="checkbox" id="f4"><label for="f4">Apologize cleanly.</label></div>
+          <div class="checkrow"><input type="checkbox" id="f5"><label for="f5">Be present when the mood shifts.</label></div>
+          <div class="checkrow"><input type="checkbox" id="f6"><label for="f6">Seek to understand.</label></div>
+          <div class="checkrow"><input type="checkbox" id="f7"><label for="f7">Stay in the room when conversations get uncomfortable.</label></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="pill amber">Pressure vs Safety</div>
+        <div class="quote">Before you speak, ask: “Will what I’m about to say increase pressure, or increase safety?”</div>
+        <input type="text" id="reducePressure" placeholder="Today I will reduce pressure by..." />
+      </div>
+
+      <div class="card">
+        <div class="pill">Daily Leadership Metrics</div>
+        <div class="kpi">
+          <div class="stat"><div class="num" id="kpi1">0</div><div class="lbl">Focus items checked</div></div>
+          <div class="stat"><div class="num" id="kpi2">0</div><div class="lbl">Home tasks handled</div></div>
+          <div class="stat"><div class="num" id="kpi3">0</div><div class="lbl">Night reflection checks</div></div>
+          <div class="stat"><div class="num" id="kpi4">0</div><div class="lbl">Pressure plan set</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="reset" class="tab-pane">
+      <div class="card">
+        <div class="pill amber">Panic / Emotional Spiral Reset</div>
+        <div class="step"><span class="badge">1</span>Stop talking for 60 seconds.</div>
+        <div class="step"><span class="badge">2</span>Exhale longer than you inhale 5 times.</div>
+        <div class="step"><span class="badge">3</span>Say internally: “This is activation, not truth.”</div>
+        <div class="step"><span class="badge">4</span>Separate fear from fact.</div>
+        <textarea id="factFear" placeholder="Fear: ...&#10;Fact: ..."></textarea>
+        <div class="step"><span class="badge">5</span>Use one grounded line: “I hear you.” / “That makes sense.” / “I want to understand.” / “I’m not going to argue your experience.”</div>
+      </div>
+    </div>
+
+    <div id="rehearsal" class="tab-pane">
+      <div class="card">
+        <div class="pill purple">Hard Conversation Rehearsal</div>
+        <input type="text" id="hardTopic" placeholder="What conversation are you preparing for?" />
+        <input type="text" id="hardFear" placeholder="What is my fear?" />
+        <input type="text" id="hardGoal" placeholder="What is my goal?" />
+        <textarea id="hardOpening" placeholder="Opening line..."></textarea>
+        <textarea id="hardNotDo" placeholder="What I will NOT do..."></textarea>
+        <textarea id="hardWillDo" placeholder="What I will do instead..."></textarea>
+      </div>
+    </div>
+
+    <div id="repair" class="tab-pane">
+      <div class="card">
+        <div class="pill green">Repair Script Generator</div>
+        <select id="repairType" onchange="generateRepair()">
+          <option value="mistake">Small mistake repair</option>
+          <option value="hurt">Validate hurt first</option>
+          <option value="distance">Say I care without pressure</option>
+          <option value="accountability">Take accountability without asking for a clean slate</option>
+          <option value="conflict">Lower the temperature</option>
+        </select>
+        <textarea id="repairOutput"></textarea>
+        <div class="btns">
+          <button class="primary" onclick="generateRepair()">Generate Script</button>
+          <button class="secondary" onclick="copyField('repairOutput')">Copy Script</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="home" class="tab-pane">
+      <div class="card">
+        <div class="pill">Home Leadership Dashboard</div>
+        <div class="checkrow"><input type="checkbox" id="h1"><label for="h1">Handled something without being reminded.</label></div>
+        <div class="checkrow"><input type="checkbox" id="h2"><label for="h2">Planned one step ahead instead of reacting late.</label></div>
+        <div class="checkrow"><input type="checkbox" id="h3"><label for="h3">Protected a task or routine for the kids.</label></div>
+        <div class="checkrow"><input type="checkbox" id="h4"><label for="h4">Managed my own health, money, or responsibilities.</label></div>
+        <div class="checkrow"><input type="checkbox" id="h5"><label for="h5">Made or protected time for the relationship.</label></div>
+        <div class="checkrow"><input type="checkbox" id="h6"><label for="h6">Noticed and handled a small thing without praise.</label></div>
+        <textarea id="homeNotes" placeholder="What I handled today without needing instructions..."></textarea>
+      </div>
+      <div class="card">
+        <div class="pill amber">Six-Month Family Thinking</div>
+        <textarea id="sixMonths" placeholder="Six months from now, I want our home to feel..."></textarea>
+      </div>
+    </div>
+
+    <div id="counseling" class="tab-pane">
+      <div class="card">
+        <div class="pill">Counseling Prep</div>
+        <ol>
+          <li>What specific behaviors of mine made you feel emotionally unsafe?</li>
+          <li>What does emotional safety from me look like today?</li>
+          <li>What would rebuilding trust realistically look like over the next six months?</li>
+        </ol>
+        <textarea id="counselingNotes" placeholder="Notes for counseling..."></textarea>
+      </div>
+      <div class="card">
+        <div class="pill purple">Weekly Marriage Reset</div>
+        <textarea id="weeklyReset" placeholder="1. What pattern am I fixing, not just what mistake?&#10;2. Where did I lower pressure this week?&#10;3. Where did I defend instead of understand?&#10;4. What should she experience differently next week?"></textarea>
+      </div>
+    </div>
+
+    <div id="night" class="tab-pane">
+      <div class="card">
+        <div class="pill">Did I Raise Safety or Pressure Today?</div>
+        <div class="checkrow"><input type="checkbox" id="e1"><label for="e1">I lowered pressure today.</label></div>
+        <div class="checkrow"><input type="checkbox" id="e2"><label for="e2">I showed calm instead of panic.</label></div>
+        <div class="checkrow"><input type="checkbox" id="e3"><label for="e3">I followed through on what I said I would do.</label></div>
+        <div class="checkrow"><input type="checkbox" id="e4"><label for="e4">I listened for meaning instead of defending intent.</label></div>
+        <div class="checkrow"><input type="checkbox" id="e5"><label for="e5">I stayed in the room when things felt uncomfortable.</label></div>
+        <div class="checkrow"><input type="checkbox" id="e6"><label for="e6">I acted like a steady husband and father today.</label></div>
+        <textarea id="reflection" placeholder="What I handled well today...&#10;What I will handle better tomorrow..."></textarea>
+        <div class="btns">
+          <button class="primary" onclick="saveData()">Save</button>
+          <button class="secondary" onclick="loadData()">Reload Saved</button>
+          <button class="warn" onclick="clearData()">Clear All</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">Grounded is for behavior, not perfection. The goal is consistency, steadiness, follow-through, and emotional safety over time.</div>
+  </div>
+
+  <script>
+    const ids = [
+      "reducePressure","factFear","hardTopic","hardFear","hardGoal","hardOpening","hardNotDo","hardWillDo",
+      "repairType","repairOutput","homeNotes","sixMonths","counselingNotes","weeklyReset","reflection",
+      "f1","f2","f3","f4","f5","f6","f7","h1","h2","h3","h4","h5","h6","e1","e2","e3","e4","e5","e6"
+    ];
+
+    function saveData(){
+      const data = {};
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        if(!el) return;
+        data[id] = (el.type === "checkbox") ? el.checked : el.value;
+      });
+      localStorage.setItem("groundedSingleFileApp", JSON.stringify(data));
+      updateKPIs();
+      alert("Saved.");
+    }
+
+    function loadData(){
+      const raw = localStorage.getItem("groundedSingleFileApp");
+      if(!raw) { generateRepair(); updateKPIs(); return; }
+      const data = JSON.parse(raw);
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        if(!el || !(id in data)) return;
+        if(el.type === "checkbox") el.checked = data[id];
+        else el.value = data[id];
+      });
+      if(!document.getElementById("repairOutput").value) generateRepair();
+      updateKPIs();
+    }
+
+    function clearData(){
+      localStorage.removeItem("groundedSingleFileApp");
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        if(!el) return;
+        if(el.type === "checkbox") el.checked = false;
+        else if(el.tagName === "SELECT") el.selectedIndex = 0;
+        else el.value = "";
+      });
+      generateRepair();
+      updateKPIs();
+    }
+
+    function copyText(id){
+      navigator.clipboard.writeText(document.getElementById(id).innerText).then(() => alert("Copied."));
+    }
+
+    function copyField(id){
+      navigator.clipboard.writeText(document.getElementById(id).value).then(() => alert("Copied."));
+    }
+
+    function showTab(name, btn){
+      document.querySelectorAll(".tab-pane").forEach(p => p.classList.remove("active"));
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      document.getElementById(name).classList.add("active");
+      btn.classList.add("active");
+    }
+
+    function generateRepair(){
+      const type = document.getElementById("repairType").value;
+      const scripts = {
+        mistake: "I can see how that landed badly, and I’m sorry. I’m not going to explain it away. I want to handle things like that differently and be more reliable in the small moments.",
+        hurt: "I hear that you’re hurt. I’m not going to argue your experience. I want to understand what felt most painful about that for you.",
+        distance: "I miss you, and I’m not saying that to pressure you. I just want you to know I care about you and I’m trying to show up in a steadier way.",
+        accountability: "You’re right to question whether this is different. I know I’ve said I would change before and then repeated things that hurt you. I’m not asking for a clean slate. I’m focused on showing it differently over time.",
+        conflict: "I don’t want this to turn into more pressure between us. I want to slow this down, understand your side, and handle it in a better way."
+      };
+      document.getElementById("repairOutput").value = scripts[type];
+    }
+
+    function updateKPIs(){
+      const focus = ["f1","f2","f3","f4","f5","f6","f7"].filter(id => document.getElementById(id).checked).length;
+      const home = ["h1","h2","h3","h4","h5","h6"].filter(id => document.getElementById(id).checked).length;
+      const night = ["e1","e2","e3","e4","e5","e6"].filter(id => document.getElementById(id).checked).length;
+      const pressure = document.getElementById("reducePressure").value.trim().length > 0 ? 1 : 0;
+      document.getElementById("kpi1").innerText = focus;
+      document.getElementById("kpi2").innerText = home;
+      document.getElementById("kpi3").innerText = night;
+      document.getElementById("kpi4").innerText = pressure;
+    }
+
+    document.addEventListener("input", updateKPIs);
+    document.addEventListener("change", updateKPIs);
+    window.onload = () => { loadData(); generateRepair(); };
+  </script>
+</body>
+</html>
